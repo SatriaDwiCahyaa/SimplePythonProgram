@@ -3,25 +3,29 @@ Dice Game
 Author: Satria Dwi Cahya
 Purpose: Understand how use module from python library
 """
-import os    
+import os
 import random
 
-def ClearScreen():       
+
+def ClearScreen():
     os.system('cls')
+
 
 def RandomNumber():
     return random.randint(1, 6)
 
+
 def LogicGame():
-    variabel_control = 'y'    
-    
+    variabel_control = 'y'
+
     while variabel_control == 'y':
         ClearScreen()
         print('Dice Game')
         print('---------')
         while True:
             try:
-                amount_dice = int(input('How many dice do you want to play: ').strip())
+                amount_dice = int(
+                    input('How many dice do you want to play: ').strip())
                 if amount_dice < 1:
                     print('Amount must be greater than 0')
                     continue
@@ -41,10 +45,10 @@ def LogicGame():
                 break
             elif user_input == 'n':
                 print('Thank You!')
-                break 
+                break
             else:
                 print('Wrong Input!')
-        
+
         while True:
             user_continue = input('Continue rolling the dice? (y/n): ').lower()
             if user_continue == 'n':
@@ -57,5 +61,4 @@ def LogicGame():
                 print('Wrong Input!')
 
 
-        
 LogicGame()
