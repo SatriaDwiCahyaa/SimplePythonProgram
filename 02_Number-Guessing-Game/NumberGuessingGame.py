@@ -15,8 +15,8 @@ def welcome_sign():
     print('Welcome to the Number Guessing Game!')
     print('------------------------------------')
 
-def right_number(angka_awal, angka_akhir):
-    return random.randint(angka_awal, angka_akhir)
+def right_number(start_number, final_number):
+    return random.randint(start_number, final_number)
 
 def specific_value():
     attempt = 0
@@ -59,13 +59,13 @@ def specific_value():
 
 def DefaultGame():
     attempt = 0
-    angka_awal = random.randint(1, 500)
-    angka_akhir = random.randint(501, 999)
-    right_answer = right_number(angka_awal, angka_akhir)
+    start_number = random.randint(1, 500)
+    final_number = random.randint(501, 999)
+    right_answer = right_number(start_number, final_number)
 
     while True:
         try:
-            user = int(input(f'Guess the number (between {angka_awal} and {angka_akhir}): '))
+            user = int(input(f'Guess the number (between {start_number} and {final_number}): '))
 
 
             if user > right_answer:
@@ -76,21 +76,33 @@ def DefaultGame():
                 attempt += 1
             else:
                 attempt += 1
-                print()
                 print('Congratulations! You guessed the number in ', attempt, ' attempts')
+                break
         except ValueError:
             print('Please input number!')
 
+control_variabel = True
 
-welcome_sign()
-while True:
+while control_variabel:
+    clear_screen()
+    welcome_sign()
     choice_mode = input('Do you want a specific value? (Y/N): ').lower().strip()
 
     if choice_mode == 'y':
         specific_value()    
-        break
     elif choice_mode == 'n':
         DefaultGame()
-        break
     else:
         print('Wrong Input!')  
+    
+    while True:
+            play_again = input('Do you want play again? (Y/N): ').upper().strip()
+
+            if play_again == 'Y':
+                break
+            elif play_again == 'N':
+                print('See you!') 
+                control_variabel = False
+                break
+            else:
+                print('Please input right value!') 
