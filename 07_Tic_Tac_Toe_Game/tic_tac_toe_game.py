@@ -7,14 +7,8 @@ Purpose:
 import os
 from termcolor import colored
 
-def clear_screen():
-    os.system('cls')
-
-
-clear_screen()
-
 # Nilai konstan untuk mempermudah
-X = 'x'
+X = 'X'
 O = 'O'
 
 # Template untuk papan
@@ -24,42 +18,102 @@ board = [
     [' ', ' ', ' ']
 ]
 
+# Untuk memberishkan terminal dari teks sebelumnya
+def clear_screen():
+    os.system('cls')
 
-# Menampilkan tanda merah untuk X dan hijau untuk O
-def cell(mark):
-     
-    if mark == X:
+# Memberikan warna merah untuk X dan warna hijau untuk O
+def warna_teks(teks):
+    if teks == X:
         color = 'red'
     else:
         color = 'green'
-    
-    return colored(mark, color)
 
-# Menampilkan papan
-def print_board():
-    line = '---+---+---'
-    print(line)
+    return colored(teks, color)
+
+# Menampilkan board 3x3 setelah diisi pengguna  
+def print_board(board):
+
+    lines = '---+---+---'
+    print(lines)
     for row in board:
-        print(f' {cell(row[0])} | {cell(row[1])} | {cell(row[2])}') 
-        print(line) 
+        print(f' {warna_teks(row[0])} | {warna_teks(row[1])} | {warna_teks(row[2])}')
+        print(lines)
 
-# Menentukan pemenang dengan memeriksa setiap bagian: baris, kolom, dan diagonal.
-def check_winner():
-    print()
+# Menentukan pemenang dengan memeriksa baris, kolom, dan diagonal dari board 3x3
+def check_winner(board):
 
-# Untuk memvalidasi bahwa papan sudah terisi penuh
-def is_full():
-    print()
+    # horizontal
+    for row in board:
+        if row[0] == row[1] == row[2] != ' ':
+            return True  
 
-# User input koordnidat papan dan mengatasi eror jika inputan user diluar nilai 
-def get_position():
-    print()
+    # vertikal
+    for column in range(3):
+        if board[0][column] == board[1][column] == board[2][column] != ' ':
+            return True
 
-# Menentukan siapa yang akan bermain serta pemanggilan get_position untuk inputan row dan kolom, dan memvalidasi jika tempat sudah terisi
-def get_move():
-    print()
+    # Diagonal
+    if board[0][0] == board[1][1] == board[2][2] != ' ' or board[0][2] == board[1][1] == board[2][0] != ' ':
+        return True
+    
+    return False
 
-# Pemanggilan fungsi dengan Menampilkan papan, user bermain; dan menentukan pemenang, dan stop permainan jika papan penuh
+# Memberi tahu user bahwa papan sudah terisi penuh dan tidak bisa bermain lagi
+def is_full(board):
+    for row in board:
+        if ' ' in row:
+            return False    
+        
+    return True
+
+# Mengambil masukan dari user dan mengatasi error ketika user memberikan nilai yang tidak sesuai
+def get_position(promt):
+    while True:
+        try:
+            position = int(input(promt))
+            if position < 0 or position > 2:
+                raise ValueError
+            return position
+        except ValueError:
+            print('Invalid input!')
+
+# Memberi tahu user bahwa posisi sudah di tempati
+def get_move(current_player):
+    print(f'Player {current_player} turn!')
+    while True:
+        row = get_position('Enter row (0-2): ')
+        column = get_position('Enter Coloumn (0-2): ')
+
+        if board[row][column] == ' ':
+            board[row][column] = current_player
+            break
+
+        print('This spot is alrady taken!')
+
+
+# orchestrator = hanya untuk pemanggilan fungsi dan mengatur alur
 def main():
-    print()
+    clear_screen()
+    current_player = X
 
+    while True:
+        get_move(current_player)
+        print_board(board)
+        
+        if check_winner(board):
+            print(f'Player {current_player} is wins!')
+            break
+
+        if is_full(board):
+            print('Board is full!')
+            break
+
+        if current_player == X:
+            current_player = O
+        else:
+            current_player = X
+
+
+if __name__ == "__main__":
+    main()
